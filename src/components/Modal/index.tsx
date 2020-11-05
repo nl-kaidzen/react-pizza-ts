@@ -4,19 +4,19 @@ import PropTypes from 'prop-types';
 import { VALUE_TO_LABEL_MAP } from '../../constants/valueToLabel';
 
 type ModalType = {
-  doughType: string,
+  dough: string,
   size: string,
   sauce: string,
   toppings: Array<string | null | undefined>,
 };
 
 const Modal: React.FC<ModalType> = ({
-  doughType, size, sauce, toppings,
+  dough, size, sauce, toppings,
 }) => (
   <div>
     <h1>Ваш заказ:</h1>
     <p>{`Размер: ${VALUE_TO_LABEL_MAP[size]}`}</p>
-    <p>{`Тип теста: ${VALUE_TO_LABEL_MAP[doughType]}`}</p>
+    <p>{`Тип теста: ${VALUE_TO_LABEL_MAP[dough]}`}</p>
     <p>{`Соус: ${VALUE_TO_LABEL_MAP[sauce]}`}</p>
     <p>Топинги: </p>
     <ul>
@@ -34,7 +34,7 @@ const Modal: React.FC<ModalType> = ({
 
 Modal.propTypes = {
   size: PropTypes.string.isRequired,
-  doughType: PropTypes.string.isRequired,
+  dough: PropTypes.string.isRequired,
   sauce: PropTypes.string.isRequired,
   toppings: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

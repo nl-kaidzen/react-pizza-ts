@@ -23,7 +23,7 @@ const calculateTotalPrice = (size: string, toppingsCount: number) => (
 const PizzaWizard: React.FC = () => {
   const [dough, setDough] = useState(DOUGH_INIT_STATE);
   const [size, setSize] = useState(SIZES_INIT_STATE);
-  const [sauces, setSauces] = useState(SAUCES_INIT_STATE);
+  const [sauce, setSauce] = useState(SAUCES_INIT_STATE);
   const [toppings, setToppings] = useState(TOPING_INIT_STATE);
   const [totalPrice, setTotalPrice] = useState(BASIC_PRICE);
   const [isVisible, setVisible] = useState(false);
@@ -41,7 +41,7 @@ const PizzaWizard: React.FC = () => {
   const handleRadioChange = useCallback((value: string, type: string | undefined) => {
     switch (type) {
       case 'DOUGH': setDough(value); break;
-      case 'SAUCE': setSauces(value); break;
+      case 'SAUCE': setSauce(value); break;
       case 'SIZE': setSize(value); break;
       default: break;
     }
@@ -49,7 +49,7 @@ const PizzaWizard: React.FC = () => {
 
   const handleSubmitClick = () => setVisible(true);
   useEffect(() => setTotalPrice(calculateTotalPrice(size, toppings.length)),
-    [size, dough, sauces, toppings]);
+    [size, dough, sauce, toppings]);
 
   return (
     <>
@@ -96,7 +96,7 @@ const PizzaWizard: React.FC = () => {
                 label={label}
                 value={value}
                 name="pizza_sauce"
-                isChecked={id === sauces}
+                isChecked={id === sauce}
                 type="SAUCE"
                 handleRadioChange={handleRadioChange}
               />
@@ -147,7 +147,7 @@ const PizzaWizard: React.FC = () => {
         </ul>
         <button type="submit" onClick={handleSubmitClick}>{totalPrice}</button>
       </form>
-      {isVisible && <Modal doughType={dough} size={size} sauce={sauces} toppings={toppings} />}
+      {isVisible && <Modal dough={dough} size={size} sauce={sauce} toppings={toppings} />}
     </>
   );
 };
