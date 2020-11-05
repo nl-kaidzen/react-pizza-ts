@@ -11,25 +11,27 @@ import {
 } from '../../constants/wizardInitialState';
 import LabeledRadio from '../LabeledRadio';
 import LabeledCheckbox from '../LabeledCheckbox';
+import Modal from '../Modal';
 
 const BASIC_PRICE = 200;
 const EXTRA_TOPING_PRICE = 29;
 
-const calculateTotalPrice = (size: string, topingCount: number) => (
-  BASIC_PRICE + topingCount * EXTRA_TOPING_PRICE + (size === '30' ? 0 : 50)
+const calculateTotalPrice = (size: string, toppingsCount: number) => (
+  BASIC_PRICE + toppingsCount * EXTRA_TOPING_PRICE + (size === '30' ? 0 : 50)
 );
 
 const PizzaWizard: React.FC = () => {
   const [dough, setDough] = useState(DOUGH_INIT_STATE);
   const [size, setSize] = useState(SIZES_INIT_STATE);
   const [sauces, setSauces] = useState(SAUCES_INIT_STATE);
-  const [toping, setToping] = useState(TOPING_INIT_STATE);
+  const [toppings, setToppings] = useState(TOPING_INIT_STATE);
   const [totalPrice, setTotalPrice] = useState(BASIC_PRICE);
+  const [isVisible, setVisible] = useState(false);
 
   const handleCheckboxChange = useCallback(
-    (value: string) => setToping((prev) => {
+    (value: string) => setToppings((prev) => {
       if (prev.includes(value)) {
-        return prev.filter((topingItem) => topingItem !== value);
+        return prev.filter((toppingsItem) => toppingsItem !== value);
       }
       return [...prev, value];
     }),
@@ -45,105 +47,108 @@ const PizzaWizard: React.FC = () => {
     }
   }, []);
 
-  const handleSubmitClick = () => console.log(dough, size, sauces);
-  useEffect(() => setTotalPrice(calculateTotalPrice(size, toping.length)),
-    [size, dough, sauces, toping]);
+  const handleSubmitClick = () => setVisible(true);
+  useEffect(() => setTotalPrice(calculateTotalPrice(size, toppings.length)),
+    [size, dough, sauces, toppings]);
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
-      <h1>Pizza Wizard v1.0</h1>
-      <h2>Размер</h2>
-      <ul>
-        {SIZES_ARRAY.map(({ id, label, value }) => (
-          <li key={id}>
-            <LabeledRadio
-              id={id}
-              label={label}
-              value={value}
-              name="pizza_size"
-              isChecked={id === size}
-              type="SIZE"
-              handleRadioChange={handleRadioChange}
-            />
-          </li>
-        ))}
-      </ul>
-      <h2>Тесто</h2>
-      <ul>
-        {DOUGH_TYPES_ARRAY.map(({ id, label, value }) => (
-          <li key={id}>
-            <LabeledRadio
-              id={id}
-              label={label}
-              value={value}
-              name="pizza_dough"
-              isChecked={id === dough}
-              type="DOUGH"
-              handleRadioChange={handleRadioChange}
-            />
-          </li>
-        ))}
-      </ul>
-      <h2>Соус</h2>
-      <ul>
-        {SAUCES_ARRAY.map(({ id, label, value }) => (
-          <li key={id}>
-            <LabeledRadio
-              id={id}
-              label={label}
-              value={value}
-              name="pizza_sauce"
-              isChecked={id === sauces}
-              type="SAUCE"
-              handleRadioChange={handleRadioChange}
-            />
-          </li>
-        ))}
-      </ul>
-      <h2>Мясные топинги</h2>
-      <ul>
-        {MEET_ARRAY.map(({ id, label, value }) => (
-          <li key={id}>
-            <LabeledCheckbox
-              id={id}
-              label={label}
-              value={value}
-              isChecked={toping.includes(id)}
-              handleCheckboxChange={handleCheckboxChange}
-            />
-          </li>
-        ))}
-      </ul>
-      <h2>Сыр</h2>
-      <ul>
-        {CHEESE_ARRAY.map(({ id, label, value }) => (
-          <li key={id}>
-            <LabeledCheckbox
-              id={id}
-              label={label}
-              value={value}
-              isChecked={toping.includes(id)}
-              handleCheckboxChange={handleCheckboxChange}
-            />
-          </li>
-        ))}
-      </ul>
-      <h2>Овощи</h2>
-      <ul>
-        {VEGETABLES_ARRAY.map(({ id, label, value }) => (
-          <li key={id}>
-            <LabeledCheckbox
-              id={id}
-              label={label}
-              value={value}
-              isChecked={toping.includes(id)}
-              handleCheckboxChange={handleCheckboxChange}
-            />
-          </li>
-        ))}
-      </ul>
-      <button type="submit" onClick={handleSubmitClick}>{totalPrice}</button>
-    </form>
+    <>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <h1>Pizza Wizard v1.0</h1>
+        <h2>Размер</h2>
+        <ul>
+          {SIZES_ARRAY.map(({ id, label, value }) => (
+            <li key={id}>
+              <LabeledRadio
+                id={id}
+                label={label}
+                value={value}
+                name="pizza_size"
+                isChecked={id === size}
+                type="SIZE"
+                handleRadioChange={handleRadioChange}
+              />
+            </li>
+          ))}
+        </ul>
+        <h2>Тесто</h2>
+        <ul>
+          {DOUGH_TYPES_ARRAY.map(({ id, label, value }) => (
+            <li key={id}>
+              <LabeledRadio
+                id={id}
+                label={label}
+                value={value}
+                name="pizza_dough"
+                isChecked={id === dough}
+                type="DOUGH"
+                handleRadioChange={handleRadioChange}
+              />
+            </li>
+          ))}
+        </ul>
+        <h2>Соус</h2>
+        <ul>
+          {SAUCES_ARRAY.map(({ id, label, value }) => (
+            <li key={id}>
+              <LabeledRadio
+                id={id}
+                label={label}
+                value={value}
+                name="pizza_sauce"
+                isChecked={id === sauces}
+                type="SAUCE"
+                handleRadioChange={handleRadioChange}
+              />
+            </li>
+          ))}
+        </ul>
+        <h2>Мясные топинги</h2>
+        <ul>
+          {MEET_ARRAY.map(({ id, label, value }) => (
+            <li key={id}>
+              <LabeledCheckbox
+                id={id}
+                label={label}
+                value={value}
+                isChecked={toppings.includes(id)}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            </li>
+          ))}
+        </ul>
+        <h2>Сыр</h2>
+        <ul>
+          {CHEESE_ARRAY.map(({ id, label, value }) => (
+            <li key={id}>
+              <LabeledCheckbox
+                id={id}
+                label={label}
+                value={value}
+                isChecked={toppings.includes(id)}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            </li>
+          ))}
+        </ul>
+        <h2>Овощи</h2>
+        <ul>
+          {VEGETABLES_ARRAY.map(({ id, label, value }) => (
+            <li key={id}>
+              <LabeledCheckbox
+                id={id}
+                label={label}
+                value={value}
+                isChecked={toppings.includes(id)}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            </li>
+          ))}
+        </ul>
+        <button type="submit" onClick={handleSubmitClick}>{totalPrice}</button>
+      </form>
+      {isVisible && <Modal doughType={dough} size={size} sauce={sauces} toppings={toppings} />}
+    </>
   );
 };
 

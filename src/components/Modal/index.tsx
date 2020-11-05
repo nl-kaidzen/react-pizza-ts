@@ -1,39 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { VALUE_TO_LABEL_MAP } from '../../constants/valueToLabel';
+
 type ModalType = {
-  isVisible: boolean,
-  orderDetails: object,
+  doughType: string,
+  size: string,
+  sauce: string,
+  toppings: Array<string | null | undefined>,
 };
 
-const VALUE_TO_LABEL_MAP = {
-
-};
-
-const Modal: React.FC<ModalType> = ({ isVisible, orderDetails }) => {
-  const { doughType, size, sauce, toppings } = orderDetails;
-  return (
-    <div>
-      <h1>Ваш заказ:</h1>
-      <p>{`Размер: ${size}`}</p>
-      <p>{`Тип теста: ${doughType}`}</p>
-      <p>{`Соус: ${sauce}`}</p>
-      <p>Топинги: </p>
-      <ul>
-        {toppings.map((toping: string) => <li key={toping}>{}</li>)}
-      </ul>
-    </div>
-  );
-};
+const Modal: React.FC<ModalType> = ({
+  doughType, size, sauce, toppings,
+}) => (
+  <div>
+    <h1>Ваш заказ:</h1>
+    <p>{`Размер: ${VALUE_TO_LABEL_MAP[size]}`}</p>
+    <p>{`Тип теста: ${VALUE_TO_LABEL_MAP[doughType]}`}</p>
+    <p>{`Соус: ${VALUE_TO_LABEL_MAP[sauce]}`}</p>
+    <p>Топинги: </p>
+    <ul>
+      {toppings.length > 0 && toppings.map(
+        (topping: string | null | undefined) => (
+          <li
+            key={topping}
+          >{VALUE_TO_LABEL_MAP[typeof topping === 'string' ? topping : JSON.stringify(topping)]}
+          </li>
+        ),
+      )}
+    </ul>
+  </div>
+);
 
 Modal.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  orderDetails: PropTypes.shape({
-    size: PropTypes.string.isRequired,
-    doughType: PropTypes.string.isRequired,
-    sauce: PropTypes.string.isRequired,
-    toppings: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }).isRequired,
-}
+  size: PropTypes.string.isRequired,
+  doughType: PropTypes.string.isRequired,
+  sauce: PropTypes.string.isRequired,
+  toppings: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default React.memo(Modal);
