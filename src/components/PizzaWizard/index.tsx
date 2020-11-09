@@ -5,10 +5,10 @@ import RadioGroup from 'components/common/RadioGroup';
 import {
   DOUGH_TYPES_ARRAY, SIZES_ARRAY, MEET_ARRAY, VEGETABLES_ARRAY, CHEESE_ARRAY, SAUCES_ARRAY,
 } from 'constants/wizardOptions';
-
 import {
   DOUGH_INIT_STATE, SIZES_INIT_STATE, SAUCES_INIT_STATE, TOPING_INIT_STATE,
-} from '../../constants/wizardInitialState';
+} from 'constants/wizardInitialState';
+
 import Modal from '../Modal';
 
 const BASIC_PRICE = 200;
