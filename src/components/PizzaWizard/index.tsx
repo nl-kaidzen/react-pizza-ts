@@ -1,16 +1,14 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import CheckboxGroup from 'components/common/CheckboxGroup';
+import RadioGroup from 'components/common/RadioGroup';
 
 import {
   DOUGH_TYPES_ARRAY, SIZES_ARRAY, MEET_ARRAY, VEGETABLES_ARRAY, CHEESE_ARRAY, SAUCES_ARRAY,
-} from '../../constants/wizardOptions';
+} from 'constants/wizardOptions';
+
 import {
   DOUGH_INIT_STATE, SIZES_INIT_STATE, SAUCES_INIT_STATE, TOPING_INIT_STATE,
 } from '../../constants/wizardInitialState';
-import LabeledRadio from '../LabeledRadio';
-import LabeledCheckbox from '../LabeledCheckbox';
 import Modal from '../Modal';
 
 const BASIC_PRICE = 200;
@@ -29,7 +27,7 @@ const PizzaWizard: React.FC = () => {
   const [isVisible, setVisible] = useState(false);
 
   const handleCheckboxChange = useCallback(
-    (value: string) => setToppings((prev) => {
+    (value: string) => setToppings((prev: Array<string>) => {
       if (prev.includes(value)) {
         return prev.filter((toppingsItem) => toppingsItem !== value);
       }
@@ -38,7 +36,7 @@ const PizzaWizard: React.FC = () => {
     [],
   );
 
-  const handleRadioChange = useCallback((value: string, type: string | undefined) => {
+  const handleRadioChange = useCallback((value: string, type: string) => {
     switch (type) {
       case 'DOUGH': setDough(value); break;
       case 'SAUCE': setSauce(value); break;
@@ -56,95 +54,41 @@ const PizzaWizard: React.FC = () => {
       <form onSubmit={(e) => e.preventDefault()}>
         <h1>Pizza Wizard v1.0</h1>
         <h2>Размер</h2>
-        <ul>
-          {SIZES_ARRAY.map(({ id, label, value }) => (
-            <li key={id}>
-              <LabeledRadio
-                id={id}
-                label={label}
-                value={value}
-                name="pizza_size"
-                isChecked={id === size}
-                type="SIZE"
-                handleRadioChange={handleRadioChange}
-              />
-            </li>
-          ))}
-        </ul>
+        <RadioGroup
+          radioArray={SIZES_ARRAY}
+          name="pizza_size"
+          type="SIZE"
+          onChange={handleRadioChange}
+        />
         <h2>Тесто</h2>
-        <ul>
-          {DOUGH_TYPES_ARRAY.map(({ id, label, value }) => (
-            <li key={id}>
-              <LabeledRadio
-                id={id}
-                label={label}
-                value={value}
-                name="pizza_dough"
-                isChecked={id === dough}
-                type="DOUGH"
-                handleRadioChange={handleRadioChange}
-              />
-            </li>
-          ))}
-        </ul>
+        <RadioGroup
+          radioArray={DOUGH_TYPES_ARRAY}
+          name="pizza_dough"
+          type="DOUGH"
+          onChange={handleRadioChange}
+        />
         <h2>Соус</h2>
-        <ul>
-          {SAUCES_ARRAY.map(({ id, label, value }) => (
-            <li key={id}>
-              <LabeledRadio
-                id={id}
-                label={label}
-                value={value}
-                name="pizza_sauce"
-                isChecked={id === sauce}
-                type="SAUCE"
-                handleRadioChange={handleRadioChange}
-              />
-            </li>
-          ))}
-        </ul>
+        <RadioGroup
+          radioArray={SAUCES_ARRAY}
+          name="pizza_sauce"
+          type="SAUCE"
+          onChange={handleRadioChange}
+        />
         <h2>Мясные топинги</h2>
-        <ul>
-          {MEET_ARRAY.map(({ id, label, value }) => (
-            <li key={id}>
-              <LabeledCheckbox
-                id={id}
-                label={label}
-                value={value}
-                isChecked={toppings.includes(id)}
-                handleCheckboxChange={handleCheckboxChange}
-              />
-            </li>
-          ))}
-        </ul>
+        <CheckboxGroup
+          checkboxesArray={MEET_ARRAY}
+          onChange={handleCheckboxChange}
+        />
         <h2>Сыр</h2>
-        <ul>
-          {CHEESE_ARRAY.map(({ id, label, value }) => (
-            <li key={id}>
-              <LabeledCheckbox
-                id={id}
-                label={label}
-                value={value}
-                isChecked={toppings.includes(id)}
-                handleCheckboxChange={handleCheckboxChange}
-              />
-            </li>
-          ))}
-        </ul>
+        <CheckboxGroup
+          checkboxesArray={CHEESE_ARRAY}
+          onChange={handleCheckboxChange}
+        />
         <h2>Овощи</h2>
-        <ul>
-          {VEGETABLES_ARRAY.map(({ id, label, value }) => (
-            <li key={id}>
-              <LabeledCheckbox
-                id={id}
-                label={label}
-                value={value}
-                isChecked={toppings.includes(id)}
-                handleCheckboxChange={handleCheckboxChange}
-              />
-            </li>
-          ))}
-        </ul>
+        <CheckboxGroup
+          checkboxesArray={VEGETABLES_ARRAY}
+          onChange={handleCheckboxChange}
+        />
         <button type="submit" onClick={handleSubmitClick}>{totalPrice}</button>
       </form>
       {isVisible && <Modal dough={dough} size={size} sauce={sauce} toppings={toppings} />}
