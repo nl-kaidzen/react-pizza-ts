@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import PizzaWizard from './components/PizzaWizard';
+import PizzaWizard from './components/pages/PizzaWizardPage';
 
 function App() {
   return (

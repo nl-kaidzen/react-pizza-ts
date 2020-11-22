@@ -1,46 +1,36 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-// import PropTypes from 'prop-types';
-import LabeledRadio from 'components/common/LabeledRadio';
 
 type RadioObject = {
   id: string,
   label: string,
 };
 
-type RadioGroupType = {
-  radioArray: Array<RadioObject>,
+type RadioGroupProps = {
+  radios: Array<RadioObject>,
   name: string,
-  type: string,
-  onChange: (value: string, type: string) => void,
+  value: string,
+  onChange: (value: string) => void,
 };
 
-const RadioGroup: React.FC<RadioGroupType> = ({
-  radioArray, onChange, name, type,
-}) => (
+const RadioGroup: React.FC<RadioGroupProps> = ({
+  radios, onChange, name, value,
+}: RadioGroupProps) => (
   <ul>
-    {radioArray.map(({
+    {radios.map(({
       id, label,
     }) => (
-      <li key={id}>
-        <LabeledRadio
+      <label htmlFor={id}>
+        <input
+          type="radio"
           id={id}
           name={name}
-          type={type}
-          label={label}
-          onChange={onChange}
+          checked={value === id}
+          onChange={() => onChange(id)}
         />
-      </li>
+        {label}
+      </label>
     ))}
   </ul>
 );
-
-/* RadioGroup.propTypes = {
-  checkboxesArray: PropTypes.arrayOf<CheckboxObject>({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-}; */
 
 export default React.memo(RadioGroup);

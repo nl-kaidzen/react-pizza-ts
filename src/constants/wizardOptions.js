@@ -40,7 +40,7 @@ export const VEGETABLES_ARRAY = [
   },
 ];
 
-export const DOUGH_TYPES_ARRAY = [
+export const DOUGH_ARRAY = [
   { id: 'thin', label: 'Тонкое', value: 'thin' },
   { id: 'thick', label: 'Пышное', value: 'thick' },
 ];
