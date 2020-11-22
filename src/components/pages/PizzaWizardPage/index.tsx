@@ -1,15 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import CheckboxGroup from 'components/common/CheckboxGroup';
 import RadioGroup from 'components/common/RadioGroup';
+import PizzaConfirmationPage from 'components/pages/PizzaConfirmationPage';
 
 import {
-  DOUGH_TYPES_ARRAY, SIZES_ARRAY, MEET_ARRAY, VEGETABLES_ARRAY, CHEESE_ARRAY, SAUCES_ARRAY,
+  DOUGH_ARRAY, SIZES_ARRAY, MEET_ARRAY, VEGETABLES_ARRAY, CHEESE_ARRAY, SAUCES_ARRAY,
 } from 'constants/wizardOptions';
 import {
   DOUGH_INIT_STATE, SIZES_INIT_STATE, SAUCES_INIT_STATE, TOPING_INIT_STATE,
 } from 'constants/wizardInitialState';
-
-import Modal from '../Modal';
 
 const BASIC_PRICE = 200;
 const EXTRA_TOPING_PRICE = 29;
@@ -24,28 +23,23 @@ const PizzaWizard: React.FC = () => {
   const [sauce, setSauce] = useState(SAUCES_INIT_STATE);
   const [toppings, setToppings] = useState(TOPING_INIT_STATE);
   const [totalPrice, setTotalPrice] = useState(BASIC_PRICE);
-  const [isVisible, setVisible] = useState(false);
+  const [isConfirmationVisible, setConfirmationVisible] = useState(false);
 
-  const handleCheckboxChange = useCallback(
-    (value: string) => setToppings((prev: Array<string>) => {
-      if (prev.includes(value)) {
-        return prev.filter((toppingsItem) => toppingsItem !== value);
+  const handleCheckboxToggle = useCallback(
+    (topping: string) => setToppings((prevToppings: Array<string>) => {
+      if (prevToppings.includes(topping)) {
+        return prevToppings.filter((toppingsItem) => toppingsItem !== topping);
       }
-      return [...prev, value];
+      return [...prevToppings, topping];
     }),
     [],
   );
 
-  const handleRadioChange = useCallback((value: string, type: string) => {
-    switch (type) {
-      case 'DOUGH': setDough(value); break;
-      case 'SAUCE': setSauce(value); break;
-      case 'SIZE': setSize(value); break;
-      default: break;
-    }
-  }, []);
+  const handleDoughChange = useCallback((value: string) => setDough(value), []);
+  const handleSauceChange = useCallback((value: string) => setSauce(value), []);
+  const handleSizeChange = useCallback((value: string) => setSize(value), []);
 
-  const handleSubmitClick = () => setVisible(true);
+  const handleSubmitClick = () => setConfirmationVisible(true);
   useEffect(() => setTotalPrice(calculateTotalPrice(size, toppings.length)),
     [size, dough, sauce, toppings]);
 
@@ -55,43 +49,50 @@ const PizzaWizard: React.FC = () => {
         <h1>Pizza Wizard v1.0</h1>
         <h2>Размер</h2>
         <RadioGroup
-          radioArray={SIZES_ARRAY}
+          radios={SIZES_ARRAY}
+          value={size}
           name="pizza_size"
-          type="SIZE"
-          onChange={handleRadioChange}
+          onChange={handleSizeChange}
         />
         <h2>Тесто</h2>
         <RadioGroup
-          radioArray={DOUGH_TYPES_ARRAY}
+          radios={DOUGH_ARRAY}
+          value={dough}
           name="pizza_dough"
-          type="DOUGH"
-          onChange={handleRadioChange}
+          onChange={handleDoughChange}
         />
         <h2>Соус</h2>
         <RadioGroup
-          radioArray={SAUCES_ARRAY}
+          radios={SAUCES_ARRAY}
+          value={sauce}
           name="pizza_sauce"
-          type="SAUCE"
-          onChange={handleRadioChange}
+          onChange={handleSauceChange}
         />
         <h2>Мясные топинги</h2>
         <CheckboxGroup
-          checkboxesArray={MEET_ARRAY}
-          onChange={handleCheckboxChange}
+          checkboxes={MEET_ARRAY}
+          onChange={handleCheckboxToggle}
         />
         <h2>Сыр</h2>
         <CheckboxGroup
-          checkboxesArray={CHEESE_ARRAY}
-          onChange={handleCheckboxChange}
+          checkboxes={CHEESE_ARRAY}
+          onChange={handleCheckboxToggle}
         />
         <h2>Овощи</h2>
         <CheckboxGroup
-          checkboxesArray={VEGETABLES_ARRAY}
-          onChange={handleCheckboxChange}
+          checkboxes={VEGETABLES_ARRAY}
+          onChange={handleCheckboxToggle}
         />
         <button type="submit" onClick={handleSubmitClick}>{totalPrice}</button>
       </form>
-      {isVisible && <Modal dough={dough} size={size} sauce={sauce} toppings={toppings} />}
+      {isConfirmationVisible && (
+      <PizzaConfirmationPage
+        dough={dough}
+        size={size}
+        sauce={sauce}
+        toppings={toppings}
+      />
+      )}
     </>
   );
 };

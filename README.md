@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Contracts
+
+Contracts:
+1. Optimization of re-renders at the development stage. We use `useCallback` + `useMemo` (React.memo);
+2. We divide into container and presentation components.
+`useSelector`, `useContext`, `useDispatch` only in containers. Presentation components are pure functions.
+
 ## Available Scripts
 
 In the project directory, you can run:

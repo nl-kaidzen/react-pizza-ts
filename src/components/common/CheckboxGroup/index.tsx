@@ -1,40 +1,28 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-// import PropTypes from 'prop-types';
-import LabeledCheckbox from 'components/common/LabeledCheckbox';
 
 type CheckboxObject = {
   id: string,
   label: string,
 };
 
-type CheckboxGroupType = {
-  checkboxesArray: Array<CheckboxObject>,
+type CheckboxGroupProps = {
+  checkboxes: Array<CheckboxObject>,
   onChange: (value: string) => void,
 };
 
-const CheckboxGroup: React.FC<CheckboxGroupType> = ({
-  checkboxesArray, onChange,
-}) => (
+const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
+  checkboxes, onChange,
+}: CheckboxGroupProps) => (
   <ul>
-    {checkboxesArray.map(({ id, ...checkboxObject }) => (
+    {checkboxes.map(({ id, label }) => (
       <li key={id}>
-        <LabeledCheckbox
-          id={id}
-          {...checkboxObject}
-          onChange={onChange}
-        />
+        <label htmlFor={id}>
+          <input type="checkbox" id={id} name={id} onChange={() => onChange(id)} />
+          {label}
+        </label>
       </li>
     ))}
   </ul>
 );
-
-/* CheckboxGroup.propTypes = {
-  checkboxesArray: PropTypes.arrayOf<CheckboxObject>({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-}; */
 
 export default React.memo(CheckboxGroup);
